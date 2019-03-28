@@ -1,4 +1,8 @@
 # 爬虫练习-3
+
+# 爬取页面：
+https://book.douban.com/tag/?view=type
+
 # 用途：
 1. 爬取豆瓣所有图书信息并存入mysql
 2. 如果中途停止，可以续爬
