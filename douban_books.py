@@ -19,6 +19,7 @@ User_Agents = [
     'Mozilla/5.0(Macintosh;IntelMacOSX10.6;rv:2.0.1)Gecko/20100101Firefox/4.0.1']
 User_Agent = random.choice(User_Agents)
 headers = {
+#	'Cookie': '__yadk_uid=u6GlrrCZskwoNuFTOpYdF4AvZFm3ZdUI; bid=OLQJhN2Wgfc; gr_user_id=48249b27-ff46-4405-a6e8-a049abb747f9; _vwo_uuid_v2=D7DEAE104B82BD06A9069B846C9B9F9E5|a504c1ccb7d9a1e255c6a756a1983c17; push_noty_num=0; push_doumail_num=0; viewed="26709315"; __utmz=30149280.1553768445.9.7.utmcsr=baidu|utmccn=(organic)|utmcmd=organic; __utmz=81379588.1553768445.24.17.utmcsr=baidu|utmccn=(organic)|utmcmd=organic; _pk_ref.100001.3ac3=%5B%22%22%2C%22%22%2C1553792655%2C%22https%3A%2F%2Fwww.baidu.com%2Flink%3Furl%3D-9u_JYMav-j6mhWJkEeQjRfLzcURZybCuAddKbFsHEDWvA_GyJHQWMR9JsBMvGlp%26wd%3D%26eqid%3Da97876d20000a222000000065c9c9feb%22%5D; _pk_ses.100001.3ac3=*; __utma=30149280.243620679.1553184006.1553768445.1553792655.10; __utmc=30149280; __utmt_douban=1; __utma=81379588.1989402830.1551342316.1553768445.1553792655.25; __utmc=81379588; __utmt=1; dbcl2="146582699:9jShGd55bGg"; ck=wg38; _pk_id.100001.3ac3=252333f7ab6cc772.1551342316.25.1553792718.1553768445.; __utmb=30149280.2.10.1553792655; __utmb=81379588.2.10.1553792655',
     'Host': 'book.douban.com',
     'User-Agent': User_Agent
 }
@@ -90,7 +91,7 @@ class parse_data(object):
         s.mount('https://', HTTPAdapter(max_retries=3))
         try:
             r = s.get(url, headers=headers, allow_redirects=False, timeout=3)
-        except BaseException:
+        except:
             raise
         return r.text
 
@@ -106,7 +107,7 @@ class parse_data(object):
             type_url = types_base_url + type
             type_url_set.add(type_url)
         return type_url_set
-        time.sleep(random.randint(4, 12))
+        time.sleep(random.randint(9, 21))
 
     def get_remain_type_urls(
             self,
@@ -116,7 +117,7 @@ class parse_data(object):
             book_log_name,
             log):
         """从所有标签首页链接获取书本链接"""
-        print(f"{index_type_url}开始爬取特定类型首页信息")
+        print(f"[{(time.strftime('%H:%M:%S',time.localtime()))}]{index_type_url}开始爬取特定类型首页信息")
         db = pymysql.connect(
             host=host,
             user=user,
@@ -165,7 +166,7 @@ class parse_data(object):
         except BaseException:
             log.update_index_remain_type_and_book_url_set(
                 index_type_url, index_log_name, remain_log_name, book_log_name)
-        time.sleep(random.randint(4, 12))
+        time.sleep(random.randint(9, 21))
 
     def get_book_urls(
             self,
@@ -174,7 +175,7 @@ class parse_data(object):
             book_log_name,
             log):
         """从所有标签首页以外链接获取书本链接"""
-        print(f"{remain_type_url}开始爬取特定类型剩余信息")
+        print(f"[{(time.strftime('%H:%M:%S',time.localtime()))}]{remain_type_url}开始爬取特定类型剩余信息")
         db = pymysql.connect(
             host=host,
             user=user,
@@ -211,11 +212,11 @@ class parse_data(object):
         log.update_remain_type_and_book_url_set(
             remain_type_url, remain_log_name, book_log_name)
         db.close()
-        time.sleep(random.randint(4, 12))
+        time.sleep(random.randint(6, 15))
 
     def get_book_data(self, book_url, book_log_name, log):
         """获取书本信息"""
-        print(f"{book_url}开始爬取书本信息")
+        print(f"[{(time.strftime('%H:%M:%S',time.localtime()))}]{book_url}开始爬取书本信息")
         book_data_string = ''
         db = pymysql.connect(
             host=host,
@@ -246,7 +247,7 @@ class parse_data(object):
         update_to_mysql(book_data, db)
         log.update_book_url_set(book_url, book_log_name)
         db.close()
-        time.sleep(random.randint(4, 12))
+        time.sleep(random.randint(9, 21))
 
 
 def update_to_mysql(data, db):
